@@ -58,8 +58,10 @@ class _Animation21ScreenState extends State<Animation21Screen>
   int selectedIndex = 0;
 
   decay() {
-    translateY.value = animationController.value
-        .clamp(-(snapedHeight) * (days.length - 1), 0.0);
+    translateY.value = animationController.value.clamp(
+      -(snapedHeight) * (days.length - 1),
+      0.0,
+    );
 
     page.value = (translateY.value / (snapedHeight)).abs();
   }
@@ -126,163 +128,185 @@ class _Animation21ScreenState extends State<Animation21Screen>
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          ContentWidget(
-            containerHeight: containerHeight,
-            page: page,
-          ),
+          ContentWidget(containerHeight: containerHeight, page: page),
           Positioned(
-              height: containerHeight,
-              width: containerWidth,
-              top: height * 0.5 - radiusY,
-              left: width - radiusX,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  CustomPaint(
-                    painter: OvalShap(),
-                  ),
-                  AnimatedBuilder(
-                      animation: page,
-                      builder: (context, child) {
-                        return CustomPaint(
-                          painter: CircleShape(
-                            angle: angle,
+            height: containerHeight,
+            width: containerWidth + contentWidth * 0.5,
+            top: height * 0.5 - radiusY,
+            left: width - radiusX - contentWidth,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Positioned.fill(
+                  left: contentWidth,
+                  child: CustomPaint(painter: OvalShap()),
+                ),
+                Positioned.fill(
+                  child: AnimatedBuilder(
+                    animation: page,
+                    builder: (context, child) {
+                      final spaceEye = 14;
+                      return Stack(
+                        children: [
+                          Positioned.fill(
+                            left: contentWidth * 1.5 - spaceEye,
+                            child: CustomPaint(
+                              painter: CircleShape(angle: angle),
+                            ),
                           ),
-                          child: Stack(
+                          Stack(
                             clipBehavior: Clip.none,
                             children: [
                               ...days.asMap().entries.map((e) {
-                                final double theta = pi +
-                                    lerpDouble(0.0, 2 * pi,
-                                        (page.value - e.key) / days.length)!;
+                                final double theta =
+                                    pi +
+                                    lerpDouble(
+                                      0.0,
+                                      2 * pi,
+                                      (page.value - e.key) / days.length,
+                                    )!;
 
                                 final double x = (radiusX) * cos(theta);
 
                                 final double y = (radiusY) * sin(theta);
 
                                 return Positioned(
-                                    top: y + radiusY - contentHeight * 0.5,
-                                    left: x + radiusX - contentWidth * 0.5,
-                                    width: contentWidth,
-                                    height: contentHeight,
-                                    child: Transform(
-                                      alignment: Alignment.center,
-                                      transform: Matrix4.identity()
-                                        ..scale(lerpDouble(
-                                            1.7,
-                                            1.1,
-                                            (page.value - e.key)
-                                                .abs()
-                                                .clamp(0.0, 1.0)))
-                                        ..rotateZ(theta - pi),
-                                      child: GestureDetector(
-                                          onPanStart: (details) {
-                                            if (animationController
-                                                .isAnimating) {
-                                              animationController.stop();
-                                            }
-                                            startpos =
-                                                endpos = details.localPosition;
-                                            selectedIndex = e.key;
-                                            angle = pi +
-                                                lerpDouble(
-                                                    0.0,
-                                                    2 * pi,
-                                                    (page.value -
-                                                            selectedIndex) /
-                                                        days.length)!;
-                                          },
-                                          onPanUpdate: (details) {
-                                            translateY.value =
-                                                (translateY.value +
-                                                        details.delta.dy)
-                                                    .clamp(
-                                                        -(snapedHeight) *
-                                                            (days.length - 1),
-                                                        0.0);
+                                  top: y + radiusY - contentHeight * 0.5,
+                                  left: x + radiusX + contentWidth * 0.5,
+                                  width: contentWidth,
+                                  height: contentHeight,
+                                  child: Transform(
+                                    alignment: Alignment.center,
+                                    transform: Matrix4.identity()
+                                      ..scale(
+                                        lerpDouble(
+                                          1.7,
+                                          1.1,
+                                          (page.value - e.key).abs().clamp(
+                                            0.0,
+                                            1.0,
+                                          ),
+                                        ),
+                                      )
+                                      ..rotateZ(theta - pi),
+                                    child: GestureDetector(
+                                      onPanStart: (details) {
+                                        if (animationController.isAnimating) {
+                                          animationController.stop();
+                                        }
+                                        startpos = endpos =
+                                            details.localPosition;
+                                        selectedIndex = e.key;
+                                        angle =
+                                            pi +
+                                            lerpDouble(
+                                              0.0,
+                                              2 * pi,
+                                              (page.value - selectedIndex) /
+                                                  days.length,
+                                            )!;
+                                      },
+                                      onPanUpdate: (details) {
+                                        translateY.value =
+                                            (translateY.value +
+                                                    details.delta.dy)
+                                                .clamp(
+                                                  -(snapedHeight) *
+                                                      (days.length - 1),
+                                                  0.0,
+                                                );
 
-                                            page.value = (translateY.value /
-                                                    (snapedHeight))
+                                        page.value =
+                                            (translateY.value / (snapedHeight))
                                                 .abs();
 
-                                            angle = pi +
-                                                lerpDouble(
-                                                    0.0,
-                                                    2 * pi,
-                                                    (page.value -
-                                                            selectedIndex) /
-                                                        days.length)!;
-
-                                            endpos = details.localPosition;
-                                          },
-                                          onPanEnd: (details) {
-                                            Offset moveDelta =
-                                                endpos - startpos;
-                                            final distance = moveDelta.distance;
-
-                                            if (distance == 0.0) {
-                                              return;
-                                            }
-
-                                            moveDelta /= distance;
-
-                                            final dir = Offset(
-                                              moveDelta.dx.roundToDouble(),
-                                              moveDelta.dy.roundToDouble(),
-                                            );
-
-                                            final velocity = Offset(
+                                        angle =
+                                            pi +
+                                            lerpDouble(
                                               0.0,
-                                              dir.dy > 0.0
-                                                  ? snapedHeight * 0.6
-                                                  : snapedHeight * 0.4,
+                                              2 * pi,
+                                              (page.value - selectedIndex) /
+                                                  days.length,
+                                            )!;
+
+                                        endpos = details.localPosition;
+                                      },
+                                      onPanEnd: (details) {
+                                        Offset moveDelta = endpos - startpos;
+                                        final distance = moveDelta.distance;
+
+                                        if (distance == 0.0) {
+                                          return;
+                                        }
+
+                                        moveDelta /= distance;
+
+                                        final dir = Offset(
+                                          moveDelta.dx.roundToDouble(),
+                                          moveDelta.dy.roundToDouble(),
+                                        );
+
+                                        final velocity = Offset(
+                                          0.0,
+                                          dir.dy > 0.0
+                                              ? snapedHeight * 0.6
+                                              : snapedHeight * 0.4,
+                                        );
+
+                                        final frictionSimulation =
+                                            FrictionSimulation(
+                                              0.4,
+                                              translateY.value,
+                                              velocity.dy,
                                             );
 
-                                            final frictionSimulation =
-                                                FrictionSimulation(
-                                                    0.4,
-                                                    translateY.value,
-                                                    velocity.dy);
+                                        final double snapedContainer =
+                                            (frictionSimulation.finalX /
+                                            snapedHeight);
 
-                                            final double snapedContainer =
-                                                (frictionSimulation.finalX /
-                                                    snapedHeight);
+                                        double snap =
+                                            snapedContainer.floor() *
+                                            (snapedHeight);
 
-                                            double snap =
-                                                snapedContainer.floor() *
-                                                    (snapedHeight);
+                                        final springsimulation =
+                                            ScrollSpringSimulation(
+                                              SpringDescription.withDampingRatio(
+                                                mass: 1.0,
+                                                stiffness: 1000.0,
+                                                ratio: 2.0,
+                                              ),
+                                              translateY.value,
+                                              snap,
+                                              0.1,
+                                            );
 
-                                            final springsimulation =
-                                                ScrollSpringSimulation(
-                                                    SpringDescription
-                                                        .withDampingRatio(
-                                                      mass: 1.0,
-                                                      stiffness: 1000.0,
-                                                      ratio: 2.0,
-                                                    ),
-                                                    translateY.value,
-                                                    snap,
-                                                    0.1);
+                                        animationController.animateWith(
+                                          springsimulation,
+                                        );
 
-                                            animationController
-                                                .animateWith(springsimulation);
-
-                                            angle = pi;
-                                          },
-                                          child: TextWidget(
-                                              contentHeight: contentHeight,
-                                              contentWidth: contentWidth,
-                                              pagePercent: (page.value - e.key),
-                                              day: e.key + 1,
-                                              dayTitle: e.value)),
-                                    ));
-                              })
+                                        angle = pi;
+                                      },
+                                      child: TextWidget(
+                                        contentHeight: contentHeight,
+                                        contentWidth: contentWidth,
+                                        pagePercent: (page.value - e.key),
+                                        day: e.key + 1,
+                                        dayTitle: e.value,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
                             ],
                           ),
-                        );
-                      }),
-                ],
-              )),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

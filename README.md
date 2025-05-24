@@ -8,8 +8,6 @@ The purpose of this App is to teach you how Animation are done in flutter ,There
 
 ## why this App is a great for taking your skills of UI/UX in to the next level.
 
----
-
 ###  :racehorse: Animations 
 
 are chosen so that teach you something new and deep about the techniques behind it
