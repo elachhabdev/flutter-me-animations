@@ -57,7 +57,8 @@ class _Animation34ScreenState extends State<Animation34Screen>
 
   generateevents() {
     for (int i = 0; i < numberOfYears * 0.5; i++) {
-      final double year = startYears +
+      final double year =
+          startYears +
           Random().nextInt((gapYears * (numberOfYears - 2)).toInt());
 
       double interval = startYears;
@@ -88,7 +89,8 @@ class _Animation34ScreenState extends State<Animation34Screen>
     for (int i = 0; i < numberOfYears; i++) {
       double maxyears = startYears + (gapYears * (numberOfYears - 3)).toInt();
 
-      double year = startYears +
+      double year =
+          startYears +
           Random().nextInt((gapYears * (numberOfYears - 3)).toInt());
 
       double interval = Random().nextInt(8) * gapYears;
@@ -111,21 +113,32 @@ class _Animation34ScreenState extends State<Animation34Screen>
 
       yearsImportant.add(YearImportant(start: start, column: column, end: end));
 
-      eventsImportant.add(EventImportant(
-          color: Color.fromARGB(255, Random().nextInt(255),
-              Random().nextInt(255), Random().nextInt(255)),
+      eventsImportant.add(
+        EventImportant(
+          color: Color.fromARGB(
+            255,
+            Random().nextInt(255),
+            Random().nextInt(255),
+            Random().nextInt(255),
+          ),
           column: column,
           end: end,
           image: 'movie${Random().nextInt(5) + 1}.jpg',
-          start: start));
+          start: start,
+        ),
+      );
     }
   }
 
   scrolllistener() {
-    translateX.value = lerpDouble(0.0, width,
-        scrollController.offset / scrollController.position.maxScrollExtent)!;
+    translateX.value = lerpDouble(
+      0.0,
+      width,
+      scrollController.offset / scrollController.position.maxScrollExtent,
+    )!;
 
-    currentYear.value = startYears +
+    currentYear.value =
+        startYears +
         lerpDouble(0, gapYears, scrollController.offset / gapYears)!;
   }
 
@@ -184,9 +197,7 @@ class _Animation34ScreenState extends State<Animation34Screen>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: height * 0.5,
-                      ),
+                      SizedBox(height: height * 0.5),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -200,9 +211,7 @@ class _Animation34ScreenState extends State<Animation34Screen>
                             events: events,
                             animationController: animationController,
                           ),
-                          SizedBox(
-                            width: 20 * fem,
-                          ),
+                          SizedBox(width: 20 * fem),
                           EventImportantWidget(
                             column: 1,
                             currentYear: currentYear,
@@ -211,9 +220,7 @@ class _Animation34ScreenState extends State<Animation34Screen>
                             numberOfYears: numberOfYears,
                             startYears: startYears,
                           ),
-                          SizedBox(
-                            width: 10 * fem,
-                          ),
+                          SizedBox(width: 10 * fem),
                           EventImportantWidget(
                             column: 2,
                             currentYear: currentYear,
@@ -222,9 +229,7 @@ class _Animation34ScreenState extends State<Animation34Screen>
                             numberOfYears: numberOfYears,
                             startYears: startYears,
                           ),
-                          SizedBox(
-                            width: 10 * fem,
-                          ),
+                          SizedBox(width: 10 * fem),
                           EventImportantWidget(
                             column: 3,
                             currentYear: currentYear,
@@ -235,19 +240,14 @@ class _Animation34ScreenState extends State<Animation34Screen>
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: height * 0.5,
-                      ),
+                      SizedBox(height: height * 0.5),
                     ],
                   ),
                 ),
                 Positioned.fill(
                   child: Align(
                     alignment: Alignment.center,
-                    child: Container(
-                      height: 0.5,
-                      color: Colors.white54,
-                    ),
+                    child: Container(height: 0.5, color: Colors.white54),
                   ),
                 ),
                 Positioned.fill(
@@ -256,78 +256,85 @@ class _Animation34ScreenState extends State<Animation34Screen>
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: AnimatedBuilder(
-                        animation: currentYear,
-                        builder: (context, child) {
-                          double snapYear =
-                              (currentYear.value / snapPointYear).floor() *
-                                  snapPointYear;
+                      animation: currentYear,
+                      builder: (context, child) {
+                        double snapYear =
+                            (currentYear.value / snapPointYear).floor() *
+                            snapPointYear;
 
-                          return Text(
-                            '${snapYear.toInt().abs()} ${currentYear.value >= 0 ? '' : 'B'}CE',
-                            style: TextStyle(
-                                color: Colors.white, fontSize: 24 * fem),
-                          );
-                        }),
+                        return Text(
+                          '${snapYear.toInt().abs()} ${currentYear.value >= 0 ? '' : 'B'}CE',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24 * fem,
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
                 EventsImportantHorizontalWidget(
-                    eventsImportant: eventsImportant,
-                    gapYears: gapYears,
-                    numberOfYears: numberOfYears,
-                    startYears: startYears,
-                    translateX: translateX,
-                    scrollController: scrollController),
+                  eventsImportant: eventsImportant,
+                  gapYears: gapYears,
+                  numberOfYears: numberOfYears,
+                  startYears: startYears,
+                  translateX: translateX,
+                  scrollController: scrollController,
+                ),
                 AnimatedBuilder(
                   animation: animationController,
                   builder: (context, child) {
-                    return SlideTransition(
-                      position: Tween<Offset>(
-                              begin: const Offset(0.0, 0.1),
-                              end: const Offset(0.0, 0.04))
-                          .animate(animationController),
-                      child: FadeTransition(
-                        opacity: animationController,
-                        child: child,
-                      ),
-                    );
-                  },
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: Container(
-                      width: width,
-                      height: 120 * fem,
-                      padding: const EdgeInsets.all(10.0),
-                      margin: const EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(
-                          color: Colors.blueGrey.shade200,
-                          borderRadius: BorderRadius.circular(15.0)),
-                      child: AnimatedBuilder(
-                        animation: currentYearEvent,
-                        builder: (context, child) {
-                          return Row(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                currentYearEvent.value,
-                                style: TextStyle(
-                                    fontSize: 14 * fem,
-                                    fontWeight: FontWeight.w500),
+                    return animationController.isDismissed
+                        ? SizedBox.shrink()
+                        : Positioned(
+                            height: 120 * fem,
+                            width: width,
+                            top: 0,
+                            left: 0,
+                            child: SlideTransition(
+                              position: Tween<Offset>(
+                                begin: const Offset(0.0, 0.1),
+                                end: const Offset(0.0, 0.04),
+                              ).animate(animationController),
+                              child: FadeTransition(
+                                opacity: animationController,
+                                child: child,
                               ),
-                              const VerticalDivider(
-                                color: Colors.blueGrey,
-                              ),
-                              child!
-                            ],
+                            ),
                           );
-                        },
-                        child: Flexible(
-                          child: Text(
-                            'Lorem ipsum dolor sit amet elit, ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 4,
-                            style: TextStyle(fontSize: 14 * fem),
-                          ),
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10.0),
+                    margin: const EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                      color: Colors.blueGrey.shade200,
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: AnimatedBuilder(
+                      animation: currentYearEvent,
+                      builder: (context, child) {
+                        return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              currentYearEvent.value,
+                              style: TextStyle(
+                                fontSize: 14 * fem,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            const VerticalDivider(color: Colors.blueGrey),
+                            child!,
+                          ],
+                        );
+                      },
+                      child: Flexible(
+                        child: Text(
+                          'Lorem ipsum dolor sit amet elit, ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 4,
+                          style: TextStyle(fontSize: 14 * fem),
                         ),
                       ),
                     ),
