@@ -14,7 +14,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < 51; i++) {
       if (i == 7 || i == 10 || i == 21) {
         continue;
       } else {
@@ -33,10 +33,12 @@ class _HomePageState extends State<HomePage> {
           itemCount: animations.length,
           itemBuilder: (context, index) => ElevatedButton(
             style: ElevatedButton.styleFrom(
-                minimumSize: const Size.fromHeight(40),
-                backgroundColor: Colors.green),
-            onPressed: () => Navigator.of(context)
-                .pushNamed('animation${animations[index] + 1}'),
+              minimumSize: const Size.fromHeight(40),
+              backgroundColor: Colors.green,
+            ),
+            onPressed: () => Navigator.of(
+              context,
+            ).pushNamed('animation${animations[index] + 1}'),
             child: Text(
               'animation me ${animations[index] + 1}',
               style: const TextStyle(color: Colors.white),

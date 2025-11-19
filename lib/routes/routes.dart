@@ -50,6 +50,8 @@ import 'package:flutter_me_animations/animation7/animation7_screen.dart';
 import 'package:flutter_me_animations/animation9/animation9_screen.dart';
 import 'package:flutter_me_animations/home_page.dart';
 
+import '../animation51/animation51_screen.dart';
+
 class Routes {
   static PageRouteBuilder transitionRoute(
     Widget child,
@@ -65,14 +67,15 @@ class Routes {
             Animation<double> animation,
             Animation<double> secondaryAnimation,
           ) => child,
-      transitionsBuilder: (
-        BuildContext context,
-        Animation<double> animation,
-        Animation<double> secondaryAnimation,
-        child,
-      ) {
-        return FadeTransition(opacity: animation, child: child);
-      },
+      transitionsBuilder:
+          (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            child,
+          ) {
+            return FadeTransition(opacity: animation, child: child);
+          },
     );
   }
 
@@ -178,6 +181,8 @@ class Routes {
         return MaterialPageRoute(builder: (_) => const Animation49Screen());
       case "animation50":
         return MaterialPageRoute(builder: (_) => const Animation50Screen());
+      case "animation51":
+        return MaterialPageRoute(builder: (_) => const Animation51Screen());
       default:
         return MaterialPageRoute(builder: (_) => const HomePage());
     }
