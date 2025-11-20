@@ -67,17 +67,21 @@ class MyRenderSliver extends RenderSliverList {
     maxPaintExtent =
         constraints.viewportMainAxisExtent / 2 * 2 * pi; //approximation circle
 
-    double visibleExtent = (maxPaintExtent - constraints.scrollOffset).clamp(
+    /*  double visibleExtent = (maxPaintExtent - constraints.scrollOffset).clamp(
       0.0,
       constraints.remainingPaintExtent,
+    ); */
+
+    final double visibleExtent = calculatePaintOffset(
+      constraints,
+      from: childScrollOffset(firstChild!)!,
+      to: maxPaintExtent,
     );
 
     geometry = SliverGeometry(
       scrollExtent: maxPaintExtent,
       paintExtent: visibleExtent,
-      maxPaintExtent: visibleExtent,
-      cacheExtent: visibleExtent,
-      layoutExtent: visibleExtent,
+      maxPaintExtent: maxPaintExtent,
     );
 
     childManager.didFinishLayout();
